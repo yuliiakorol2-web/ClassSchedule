@@ -5,6 +5,12 @@ namespace lab07
 {
     internal class Program
     {
+        //триває одна пара
+        const int HoursPerPair = 2;
+        //пар на тиждень для таблиці табулювання
+        const int PairsPerWeek = 10;
+        //тижнів у семестрі
+        const int WeeksInSemester = 16;
         static void Main(string[] args)
         {
             Console.OutputEncoding = Encoding.UTF8;
@@ -29,7 +35,7 @@ namespace lab07
                         Pause();
                         break;
                     case "2":
-                        Console.WriteLine("Поки не зроблено.");
+                        ShowLoadTabulation();
                         Pause();
                         break;
                     case "3":
@@ -75,6 +81,24 @@ namespace lab07
             Console.WriteLine("int    — код типу заняття (з довідника)");
             Console.WriteLine();
             Console.WriteLine("Підсумкова величина: навантаження кожного викладача за тиждень у годинах.");
+        }
+        // Табулювання функції: навантаження залежно від тривалості однієї пари
+        static void ShowLoadTabulation()
+        {
+            double from = 1.0;   // початок проміжку, год
+            double to = 3.0;     // кінець проміжку, год
+            double step = 0.25;  // дробовий крок
+
+            Console.WriteLine($"Навантаження викладача при {PairsPerWeek} парах на тиждень");
+            Console.WriteLine();
+            Console.WriteLine($"{"Пара, год",12}{"Год/тиждень",16}{"Год/семестр",16}");
+
+            for (double x = from; x <= to + 1e-9; x += step)
+            {
+                double perWeek = x * PairsPerWeek;
+                double perSemester = perWeek * WeeksInSemester;
+                Console.WriteLine($"{x,12:F2}{perWeek,16:F2}{perSemester,16:F2}");
+            }
         }
     }
 }
