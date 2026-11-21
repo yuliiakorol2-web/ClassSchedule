@@ -5,6 +5,8 @@ namespace lab07
 {
     internal class Program
     {
+        // Найбільший розмір таблиці з двома входами
+        const int MaxSize = 10;
         //триває одна пара
         const int HoursPerPair = 2;
         //пар на тиждень для таблиці табулювання
@@ -18,7 +20,7 @@ namespace lab07
 
             while (running)
             {
-                Console.WriteLine(" Розклад занять ");
+                Console.WriteLine("===Розклад занять===");
                 Console.WriteLine("1 - довідка про програму");
                 Console.WriteLine("2 - табулювання: навантаження залежно від тривалості пари");
                 Console.WriteLine("3 - таблиця навантаження викладача (групи × пари)");
@@ -101,12 +103,40 @@ namespace lab07
                 Console.WriteLine($"{x,12:F2}{perWeek,16:F2}{perSemester,16:F2}");
             }
         }
+        
+        // Читає розмір таблиці; при помилці повідомляє про неї й повертає -1
+        static int ReadSize(string prompt)
+        {
+            Console.Write(prompt);
+            string text = Console.ReadLine();
+
+            if (!int.TryParse(text, out int value))
+            {
+                Console.WriteLine("Помилка: потрібно ввести ціле число.");
+                return -1;
+            }
+            if (value <= 0)
+            {
+                Console.WriteLine("Помилка: число має бути більшим за нуль.");
+                return -1;
+            }
+            if (value > MaxSize)
+            {
+                Console.WriteLine($"Помилка: число не може бути більшим за {MaxSize}.");
+                return -1;
+            }
+            return value;
+        }
+
         //таблиця з двома входами
         static void ShowWorkloadTable()
         {
-            int rows = 5;
-            int cols = 6;
+            int rows = ReadSize($"Кількість груп (1–{MaxSize}): ");
+            if (rows == -1) return;
 
+            int cols = ReadSize($"Кількість пар на тиждень у групі (1–{MaxSize}): ");
+            if (cols == -1) return;
+            Console.WriteLine();
             Console.WriteLine("Навантаження викладача за тиждень, год");
             Console.WriteLine("(рядки — груп, стовпці — пар на тиждень у кожній групі)");
             Console.WriteLine();
@@ -118,6 +148,9 @@ namespace lab07
                 Console.Write($"{col,8}");
             }
             Console.WriteLine($"{"Разом",8}");
+           
+            int[] colTotals = new int[cols]; // підсумки стовпців
+            int grandTotal = 0;              // загальний підсумок
 
             for (int row = 1; row <= rows; row++)
             {
@@ -128,11 +161,21 @@ namespace lab07
                 {
                     int hours = row * col * HoursPerPair;
                     rowTotal += hours;
+                    colTotals[col - 1] += hours;
                     Console.Write($"{hours,8}");
                 }
 
                 Console.WriteLine($"{rowTotal,8}");
+                grandTotal += rowTotal;
             }
+            // Роздільник і рядок підсумків
+            Console.WriteLine(new string('-', 8 * (cols + 2)));
+            Console.Write($"{"Разом",8}");
+            for (int col = 0; col < cols; col++)
+            {
+                Console.Write($"{colTotals[col],8}");
+            }
+            Console.WriteLine($"{grandTotal,8}");
         }
     }
 
