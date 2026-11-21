@@ -39,7 +39,7 @@ namespace lab07
                         Pause();
                         break;
                     case "3":
-                        Console.WriteLine("Поки не зроблено.");
+                        ShowWorkloadTable();
                         Pause();
                         break;
                     case "0":
@@ -82,6 +82,7 @@ namespace lab07
             Console.WriteLine();
             Console.WriteLine("Підсумкова величина: навантаження кожного викладача за тиждень у годинах.");
         }
+        
         // Табулювання функції: навантаження залежно від тривалості однієї пари
         static void ShowLoadTabulation()
         {
@@ -100,5 +101,39 @@ namespace lab07
                 Console.WriteLine($"{x,12:F2}{perWeek,16:F2}{perSemester,16:F2}");
             }
         }
+        //таблиця з двома входами
+        static void ShowWorkloadTable()
+        {
+            int rows = 5;
+            int cols = 6;
+
+            Console.WriteLine("Навантаження викладача за тиждень, год");
+            Console.WriteLine("(рядки — груп, стовпці — пар на тиждень у кожній групі)");
+            Console.WriteLine();
+
+            //порожнє місце під стовпець з номерами рядків
+            Console.Write($"{"Груп",8}");
+            for (int col = 1; col <= cols; col++)
+            {
+                Console.Write($"{col,8}");
+            }
+            Console.WriteLine($"{"Разом",8}");
+
+            for (int row = 1; row <= rows; row++)
+            {
+                int rowTotal = 0; // підсумок рядка обнуляється на кожному рядку
+                Console.Write($"{row,8}");
+
+                for (int col = 1; col <= cols; col++)
+                {
+                    int hours = row * col * HoursPerPair;
+                    rowTotal += hours;
+                    Console.Write($"{hours,8}");
+                }
+
+                Console.WriteLine($"{rowTotal,8}");
+            }
+        }
     }
+
 }
