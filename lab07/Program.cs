@@ -20,40 +20,33 @@ namespace lab07
 
             while (running)
             {
-                Console.WriteLine("===Розклад занять===");
-                Console.WriteLine("1 - довідка про програму");
-                Console.WriteLine("2 - табулювання: навантаження залежно від тривалості пари");
-                Console.WriteLine("3 - таблиця навантаження викладача (групи × пари)");
-                Console.WriteLine("0 - вихід");
-                Console.Write("Ваш вибір: ");
-
+                ShowMenu();
                 string choice = Console.ReadLine();
                 Console.WriteLine();
 
                 switch (choice)
                 {
-                    case "1":
-                        ShowAbout();
-                        Pause();
-                        break;
-                    case "2":
-                        ShowLoadTabulation();
-                        Pause();
-                        break;
-                    case "3":
-                        ShowWorkloadTable();
-                        Pause();
-                        break;
-                    case "0":
-                        running = false;
-                        Console.WriteLine("До побачення.");
-                        break;
+                    case "1":ShowAbout();Pause();break;
+                    case "2":ShowLoadTabulation();Pause();break;
+                    case "3":ShowWorkloadTable();Pause();break;
+                    case "0":running = false;break;
                     default:
                         Console.WriteLine("Немає такого пункту. Спробуйте ще раз.");
                         Pause();
                         break;
                 }
             }
+            Console.WriteLine("До побачення.");
+        }
+        // Виводить головне меню
+        static void ShowMenu()
+        {
+            Console.WriteLine("===Розклад занять===");
+            Console.WriteLine("1 - довідка про програму");
+            Console.WriteLine("2 - табулювання: навантаження залежно від тривалості пари");
+            Console.WriteLine("3 - таблиця навантаження викладача (групи × пари)");
+            Console.WriteLine("0 - вихід");
+            Console.Write("Ваш вибір: ");
         }
 
         // Пауза перед поверненням у меню
