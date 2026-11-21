@@ -27,7 +27,7 @@ namespace lab07
                 switch (choice)
                 {
                     case "1":ShowAbout();Pause();break;
-                    case "2":ShowLoadTabulation();Pause();break;
+                    case "2":ShowLoadTabulation(1.0, 3.0, 0.25);Pause();break;
                     case "3":ShowWorkloadTable();Pause();break;
                     case "0":running = false;break;
                     default:
@@ -56,7 +56,23 @@ namespace lab07
             Console.ReadKey(true);
             Console.Clear();
         }
+                // Навантаження за тиждень, год: тривалість однієї пари × кількість пар
+               static double CalculateWeeklyLoad(double pairHours, int pairsPerWeek)
+        {
+            return pairHours * pairsPerWeek;
+        }
 
+        // Навантаження за семестр, год
+        static double CalculateSemesterLoad(double weeklyLoad, int weeks)
+        {
+            return weeklyLoad * weeks;
+        }
+
+        // Навантаження викладача, год: груп × пар на тиждень у групі × годин на пару
+        static int CalculateGroupsLoad(int groups, int pairsPerGroup)
+        {
+            return groups * pairsPerGroup * HoursPerPair;
+        }
         //тема,сутність,поля з типами
         static void ShowAbout()
         {
@@ -79,20 +95,16 @@ namespace lab07
         }
         
         // Табулювання функції: навантаження залежно від тривалості однієї пари
-        static void ShowLoadTabulation()
+        static void ShowLoadTabulation(double from, double to, double step)
         {
-            double from = 1.0;   // початок проміжку, год
-            double to = 3.0;     // кінець проміжку, год
-            double step = 0.25;  // дробовий крок
-
             Console.WriteLine($"Навантаження викладача при {PairsPerWeek} парах на тиждень");
             Console.WriteLine();
             Console.WriteLine($"{"Пара, год",12}{"Год/тиждень",16}{"Год/семестр",16}");
 
             for (double x = from; x <= to + 1e-9; x += step)
             {
-                double perWeek = x * PairsPerWeek;
-                double perSemester = perWeek * WeeksInSemester;
+                double perWeek = CalculateWeeklyLoad(x, PairsPerWeek);
+                double perSemester = CalculateSemesterLoad(perWeek, WeeksInSemester);
                 Console.WriteLine($"{x,12:F2}{perWeek,16:F2}{perSemester,16:F2}");
             }
         }
@@ -152,7 +164,7 @@ namespace lab07
 
                 for (int col = 1; col <= cols; col++)
                 {
-                    int hours = row * col * HoursPerPair;
+                    int hours = CalculateGroupsLoad(row, col);
                     rowTotal += hours;
                     colTotals[col - 1] += hours;
                     Console.Write($"{hours,8}");
@@ -171,5 +183,4 @@ namespace lab07
             Console.WriteLine($"{grandTotal,8}");
         }
     }
-
 }
