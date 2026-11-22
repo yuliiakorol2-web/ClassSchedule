@@ -27,7 +27,7 @@ namespace lab07
                 switch (choice)
                 {
                     case "1":ShowAbout();Pause();break;
-                    case "2":ShowLoadTabulation(1.0, 3.0, 0.25);Pause();break;
+                    case "2":ShowLoadTabulation();Pause();break;
                     case "3":ShowWorkloadTable();Pause();break;
                     case "0":running = false;break;
                     default:
@@ -140,7 +140,7 @@ namespace lab07
         }
         
         // Табулювання функції: навантаження залежно від тривалості однієї пари
-        static void ShowLoadTabulation(double from, double to, double step)
+        static void PrintLoadTabulation(double from, double to, double step)
         {
             Console.WriteLine($"Навантаження викладача при {PairsPerWeek} парах на тиждень");
             Console.WriteLine();
@@ -153,40 +153,28 @@ namespace lab07
                 Console.WriteLine($"{x,12:F2}{perWeek,16:F2}{perSemester,16:F2}");
             }
         }
-        
-        // Читає розмір таблиці; при помилці повідомляє про неї й повертає -1
-        static int ReadSize(string prompt)
+
+        // Запитує початок, кінець і крок, потім виводить табулювання
+        static void ShowLoadTabulation()
         {
-            Console.Write(prompt);
-            string text = Console.ReadLine();
-
-            if (!int.TryParse(text, out int value))
-            {
-                Console.WriteLine("Помилка: потрібно ввести ціле число.");
-                return -1;
-            }
-            if (value <= 0)
-            {
-                Console.WriteLine("Помилка: число має бути більшим за нуль.");
-                return -1;
-            }
-            if (value > MaxSize)
-            {
-                Console.WriteLine($"Помилка: число не може бути більшим за {MaxSize}.");
-                return -1;
-            }
-            return value;
+            double from = ReadDouble("Початок, год (0,5–5): ", 0.5, 5);
+            double to = ReadDouble($"Кінець, год ({from}–5): ", from, 5);
+            double step = ReadDouble("Крок, год (0,05–1): ", 0.05, 1);
+            Console.WriteLine();
+            PrintLoadTabulation(from, to, step);
         }
-
         //таблиця з двома входами
         static void ShowWorkloadTable()
         {
-            int rows = ReadSize($"Кількість груп (1–{MaxSize}): ");
-            if (rows == -1) return;
-
-            int cols = ReadSize($"Кількість пар на тиждень у групі (1–{MaxSize}): ");
-            if (cols == -1) return;
+            int rows = ReadInt($"Кількість груп (1–{MaxSize}): ", 1, MaxSize);
+            int cols = ReadInt($"Кількість пар на тиждень у групі (1–{MaxSize}): ", 1, MaxSize);
             Console.WriteLine();
+            PrintWorkloadTable(rows, cols);
+        }
+
+        // Виводить таблицю з двома входами за переданими розмірами
+        static void PrintWorkloadTable(int rows, int cols)
+        {
             Console.WriteLine("Навантаження викладача за тиждень, год");
             Console.WriteLine("(рядки — груп, стовпці — пар на тиждень у кожній групі)");
             Console.WriteLine();
