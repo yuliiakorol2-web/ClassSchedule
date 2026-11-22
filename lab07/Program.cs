@@ -56,8 +56,53 @@ namespace lab07
             Console.ReadKey(true);
             Console.Clear();
         }
-                // Навантаження за тиждень, год: тривалість однієї пари × кількість пар
-               static double CalculateWeeklyLoad(double pairHours, int pairsPerWeek)
+
+        // Читає дробове число з перевіркою меж. питає знову, доки не введено прийнятне
+        static double ReadDouble(string prompt, double min, double max)
+        {
+            while (true)
+            {
+                Console.Write(prompt);
+                string text = Console.ReadLine();
+
+                if (!double.TryParse(text, out double value))
+                {
+                    Console.WriteLine("Помилка: потрібно ввести число.");
+                    continue;
+                }
+                if (!(value >= min && value <= max))
+                {
+                    Console.WriteLine($"Помилка: число має бути від {min} до {max}.");
+                    continue;
+                }
+                return value;
+            }
+        }
+        
+        // Читає ціле число з перевіркою меж. питає знову, доки не введено прийнятне
+        static int ReadInt(string prompt, int min, int max)
+        {
+            while (true)
+            {
+                Console.Write(prompt);
+                string text = Console.ReadLine();
+
+                if (!int.TryParse(text, out int value))
+                {
+                    Console.WriteLine("Помилка: потрібно ввести ціле число.");
+                    continue;
+                }
+                if (value < min || value > max)
+                {
+                    Console.WriteLine($"Помилка: число має бути від {min} до {max}.");
+                    continue;
+                }
+                return value;
+            }
+        }
+
+        // Навантаження за тиждень, год: тривалість однієї пари × кількість пар
+        static double CalculateWeeklyLoad(double pairHours, int pairsPerWeek)
         {
             return pairHours * pairsPerWeek;
         }
