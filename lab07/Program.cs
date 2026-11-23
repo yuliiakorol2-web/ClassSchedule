@@ -45,6 +45,7 @@ namespace lab07
                             Pause();
                             break;
                         }
+                    case "5": PrintValues(values, count); Pause(); break;
                     case "0":running = false;break;
                     default:
                         Console.WriteLine("Немає такого пункту. Спробуйте ще раз.");
@@ -54,6 +55,22 @@ namespace lab07
             }
             Console.WriteLine("До побачення.");
         }
+        // Виводить значення масиву до count таблицею з номерами
+        static void PrintValues(double[] values, int count)
+        {
+            if (count == 0)
+            {
+                Console.WriteLine("Масив порожній.");
+                return;
+            }
+
+            Console.WriteLine($"{"№",4}{"Навантаження, год",22}");
+            for (int i = 0; i < count; i++)
+            {
+                Console.WriteLine($"{i + 1,4}{values[i],22:F2}");
+            }
+            Console.WriteLine($"Усього значень: {count}");
+        }
         // Виводить головне меню
         static void ShowMenu()
         {
@@ -62,6 +79,7 @@ namespace lab07
             Console.WriteLine("2 - табулювання: навантаження залежно від тривалості пари");
             Console.WriteLine("3 - таблиця навантаження викладача (групи × пари)");
             Console.WriteLine("4 - додати значення в масив");
+            Console.WriteLine("5 - показати значення");
             Console.WriteLine("0 - вихід");
             Console.Write("Ваш вибір: ");
         }
