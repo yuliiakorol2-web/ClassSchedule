@@ -7,16 +7,24 @@ namespace lab07
     {
         // Найбільший розмір таблиці з двома входами
         const int MaxSize = 10;
+        
         //триває одна пара
         const int HoursPerPair = 2;
+        
         //пар на тиждень для таблиці табулювання
         const int PairsPerWeek = 10;
+        
         //тижнів у семестрі
         const int WeeksInSemester = 16;
+       
+        // Місткість масиву значень
+        const int Capacity = 100;
         static void Main(string[] args)
         {
             Console.OutputEncoding = Encoding.UTF8;
             bool running = true;
+            double[] values = new double[Capacity]; // навантаження викладачів, год
+            int count = 0;                          // скільки значень зайнято
 
             while (running)
             {
@@ -29,6 +37,14 @@ namespace lab07
                     case "1":ShowAbout();Pause();break;
                     case "2":ShowLoadTabulation();Pause();break;
                     case "3":ShowWorkloadTable();Pause();break;
+                    case "4":
+                        {
+                            double newValue = ReadDouble("Навантаження, год (0–100): ", 0, 100);
+                            AddValue(values, ref count, newValue, Capacity);
+                            Console.WriteLine($"Записів у масиві: {count} з {Capacity}");
+                            Pause();
+                            break;
+                        }
                     case "0":running = false;break;
                     default:
                         Console.WriteLine("Немає такого пункту. Спробуйте ще раз.");
@@ -45,6 +61,7 @@ namespace lab07
             Console.WriteLine("1 - довідка про програму");
             Console.WriteLine("2 - табулювання: навантаження залежно від тривалості пари");
             Console.WriteLine("3 - таблиця навантаження викладача (групи × пари)");
+            Console.WriteLine("4 - додати значення в масив");
             Console.WriteLine("0 - вихід");
             Console.Write("Ваш вибір: ");
         }
@@ -118,6 +135,19 @@ namespace lab07
         {
             return groups * pairsPerGroup * HoursPerPair;
         }
+
+        // Додає значення в масив; лічильник іде через ref, щоб зміна була видна в Main
+        static void AddValue(double[] values, ref int count, double newValue, int capacity)
+        {
+            if (count == capacity)
+            {
+                Console.WriteLine("Місця більше немає.");
+                return;
+            }
+            values[count] = newValue;
+            count++;
+        }
+
         //тема,сутність,поля з типами
         static void ShowAbout()
         {
