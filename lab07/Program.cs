@@ -46,6 +46,7 @@ namespace lab07
                             break;
                         }
                     case "5": PrintValues(values, count); Pause(); break;
+                    case "6": ShowStatistics(values, count); Pause(); break;
                     case "0":running = false;break;
                     default:
                         Console.WriteLine("Немає такого пункту. Спробуйте ще раз.");
@@ -80,6 +81,7 @@ namespace lab07
             Console.WriteLine("3 - таблиця навантаження викладача (групи × пари)");
             Console.WriteLine("4 - додати значення в масив");
             Console.WriteLine("5 - показати значення");
+            Console.WriteLine("6 - показати статистику");
             Console.WriteLine("0 - вихід");
             Console.Write("Ваш вибір: ");
         }
@@ -164,6 +166,56 @@ namespace lab07
             }
             values[count] = newValue;
             count++;
+        }
+        // Знаходить найбільше значення та його номер (з 1); для порожнього набору повертає 0 і 0
+        static void FindMax(double[] values, int count, out double max, out int maxNumber)
+        {
+            if (count == 0)
+            {
+                max = 0;
+                maxNumber = 0;
+                return;
+            }
+
+            max = values[0];
+            maxNumber = 1;
+            for (int i = 1; i < count; i++)
+            {
+                if (values[i] > max)
+                {
+                    max = values[i];
+                    maxNumber = i + 1;
+                }
+            }
+        }
+
+        // Рахує суму та середнє; для порожнього набору середнє 0, а не NaN
+        static void Statistics(double[] values, int count, out double sum, out double average)
+        {
+            sum = 0;
+            for (int i = 0; i < count; i++)
+            {
+                sum += values[i];
+            }
+            average = count > 0 ? sum / count : 0;
+        }
+
+        // Виводить статистику за масивом
+        static void ShowStatistics(double[] values, int count)
+        {
+            if (count == 0)
+            {
+                Console.WriteLine("Масив порожній, статистики немає.");
+                return;
+            }
+
+            Statistics(values, count, out double sum, out double average);
+            FindMax(values, count, out double max, out int maxNumber);
+
+            Console.WriteLine($"Кількість значень: {count}");
+            Console.WriteLine($"Сума: {sum:F2} год");
+            Console.WriteLine($"Середнє: {average:F2} год");
+            Console.WriteLine($"Найбільше: {max:F2} год (номер {maxNumber})");
         }
 
         //тема,сутність,поля з типами
