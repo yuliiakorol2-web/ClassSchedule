@@ -47,6 +47,14 @@ namespace lab07
                         }
                     case "5": PrintValues(values, count); Pause(); break;
                     case "6": ShowStatistics(values, count); Pause(); break;
+                    case "7": ShowValueVsReferenceDemo(); Pause(); break;
+                    case "8":
+                        {
+                            int number = ReadInt($"Номер значення для видалення (1–{Capacity}): ", 1, Capacity);
+                            RemoveAt(values, ref count, number);
+                            Pause();
+                            break;
+                        }
                     case "0":running = false;break;
                     default:
                         Console.WriteLine("Немає такого пункту. Спробуйте ще раз.");
@@ -82,6 +90,8 @@ namespace lab07
             Console.WriteLine("4 - додати значення в масив");
             Console.WriteLine("5 - показати значення");
             Console.WriteLine("6 - показати статистику");
+            Console.WriteLine("7 - дослід: значиме і посилальне");
+            Console.WriteLine("8 - видалити значення за номером");
             Console.WriteLine("0 - вихід");
             Console.Write("Ваш вибір: ");
         }
@@ -216,6 +226,53 @@ namespace lab07
             Console.WriteLine($"Сума: {sum:F2} год");
             Console.WriteLine($"Середнє: {average:F2} год");
             Console.WriteLine($"Найбільше: {max:F2} год (номер {maxNumber})");
+        }
+
+        // Намагається змінити int-параметр без ref: змінюється лише копія
+        static void TryChangeInt(int value)
+        {
+            value = value + 100;
+            Console.WriteLine($"  Усередині методу value = {value}");
+        }
+
+        // Змінює елемент масиву: масив передається посиланням
+        static void ChangeFirstElement(double[] items)
+        {
+            items[0] = items[0] + 100;
+            Console.WriteLine($"  Усередині методу items[0] = {items[0]}");
+        }
+
+        // Показує різницю між значимим і посилальним типом
+        static void ShowValueVsReferenceDemo()
+        {
+            int price = 50;
+            double[] prices = { 50, 70, 90 };
+
+            Console.WriteLine($"До виклику:    price = {price}, prices[0] = {prices[0]}");
+            TryChangeInt(price);
+            ChangeFirstElement(prices);
+            Console.WriteLine($"Після виклику: price = {price}, prices[0] = {prices[0]}");
+            Console.WriteLine();
+            Console.WriteLine("price не змінився: метод отримав копію значення.");
+            Console.WriteLine("prices[0] змінився: метод отримав адресу того самого масиву.");
+        }
+
+        // Видаляє значення за номером (з 1), зсуває решту вліво й зменшує лічильник
+        static void RemoveAt(double[] values, ref int count, int index)
+        {
+            if (index < 1 || index > count)
+            {
+                Console.WriteLine("Немає значення з таким номером.");
+                return;
+            }
+
+            for (int i = index - 1; i < count - 1; i++)
+            {
+                values[i] = values[i + 1];
+            }
+            count--;
+            values[count] = 0;
+            Console.WriteLine($"Значення №{index} видалено. Залишилось: {count}");
         }
 
         //тема,сутність,поля з типами
