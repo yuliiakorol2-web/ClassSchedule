@@ -15,6 +15,17 @@ namespace lab07
             Console.OutputEncoding = Encoding.UTF8;
             bool running = true;
 
+            int[] ids = new int[Capacity];
+            string[] subjects = new string[Capacity];
+            string[] teachers = new string[Capacity];
+            string[] groups = new string[Capacity];
+            string[] days = new string[Capacity];
+            int[] pairNumbers = new int[Capacity];
+            string[] rooms = new string[Capacity];
+            int[] typeIds = new int[Capacity];   //код типу заняття
+            int count = 0;                       //скільки записів зайнято
+            int nextId = 1;                      //наступний номер запису
+
             while (running)
             {
                 ShowMenu();
@@ -23,7 +34,9 @@ namespace lab07
 
                 switch (choice)
                 {
-                    case "1":case "2":case "3":case "4":case "5":case "6":case "7":case "8":case "9":
+                    case "2":AddRecord(ids, subjects, teachers, groups, days, pairNumbers, rooms, typeIds, ref count, ref nextId, Capacity); Pause(); break;
+                    case "1":
+                    case "3":case "4":case "5":case "6":case "7":case "8":case "9":
                         Console.WriteLine("Поки не зроблено.");
                         Pause();
                         break;
@@ -83,6 +96,83 @@ namespace lab07
                 return value;
             }
         }
+        // Читає рядок не коротший за minLength символів (після Trim)
+        static string ReadText(string prompt, int minLength)
+        {
+            while (true)
+            {
+                Console.Write(prompt);
+                string input = Console.ReadLine();
+                if (input != null)
+                {
+                    input = input.Trim();
+                    if (input.Length >= minLength)
+                    {
+                        return input;
+                    }
+                }
+                if (minLength <= 1)
+                {
+                    Console.WriteLine("Поле не може бути порожнім.");
+                }
+                else
+                {
+                    Console.WriteLine($"Потрібно щонайменше {minLength} символи.");
+                }
+            }
+        }
 
+        // Читає день тижня зі списку допустимих значень
+        static string ReadDay(string prompt)
+        {
+            string[] allowed = { "Пн", "Вт", "Ср", "Чт", "Пт", "Сб" };
+            while (true)
+            {
+                Console.Write(prompt);
+                string input = Console.ReadLine();
+                input = input == null ? "" : input.Trim();
+                for (int i = 0; i < allowed.Length; i++)
+                {
+                    if (string.Equals(input, allowed[i], StringComparison.OrdinalIgnoreCase))
+                    {
+                        return allowed[i];
+                    }
+                }
+                Console.WriteLine("Потрібен день тижня: Пн, Вт, Ср, Чт, Пт, Сб.");
+            }
+        }
+
+        // Додає пару: збирає всі поля в локальні змінні, потім записує в масиви під індексом count
+        static void AddRecord(int[] ids, string[] subjects, string[] teachers, string[] groups,
+            string[] days, int[] pairNumbers, string[] rooms, int[] typeIds,
+            ref int count, ref int nextId, int capacity)
+        {
+            if (count == capacity)
+            {
+                Console.WriteLine("Сховище заповнене, видаліть щось зайве.");
+                return;
+            }
+
+            string subject = ReadText("Дисципліна: ", 2);
+            string teacher = ReadText("Викладач: ", 2);
+            string group = ReadText("Група: ", 2);
+            string day = ReadDay("День тижня (Пн–Сб): ");
+            int pairNumber = ReadInt("Номер пари (1–7): ", 1, 7);
+            string room = ReadText("Аудиторія: ", 1);
+            int typeId = ReadInt("Код типу заняття (1–3): ", 1, 3);
+
+            ids[count] = nextId;
+            subjects[count] = subject;
+            teachers[count] = teacher;
+            groups[count] = group;
+            days[count] = day;
+            pairNumbers[count] = pairNumber;
+            rooms[count] = room;
+            typeIds[count] = typeId;
+            count++;
+            nextId++;
+
+            Console.WriteLine($"Додано пару №{ids[count - 1]}.");
+        }
     }
 }
