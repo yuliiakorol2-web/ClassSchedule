@@ -34,8 +34,8 @@ namespace lab07
 
                 switch (choice)
                 {
+                    case "1": PrintRecords(ids, subjects, teachers, groups, days, pairNumbers, rooms, typeIds, count); Pause(); break;
                     case "2":AddRecord(ids, subjects, teachers, groups, days, pairNumbers, rooms, typeIds, ref count, ref nextId, Capacity); Pause(); break;
-                    case "1":
                     case "3":case "4":case "5":case "6":case "7":case "8":case "9":
                         Console.WriteLine("Поки не зроблено.");
                         Pause();
@@ -173,6 +173,23 @@ namespace lab07
             nextId++;
 
             Console.WriteLine($"Додано пару №{ids[count - 1]}.");
+        }
+        // Виводить усі записи таблицею
+        static void PrintRecords(int[] ids, string[] subjects, string[] teachers, string[] groups,
+            string[] days, int[] pairNumbers, string[] rooms, int[] typeIds, int count)
+        {
+            if (count == 0)
+            {
+                Console.WriteLine("Записів поки немає.");
+                return;
+            }
+
+            Console.WriteLine($"{"№",4} {"Дисципліна",-22}{"Викладач",-18}{"Група",-9}{"День",-6}{"Пара",4} {"Ауд.",-8}{"Тип",4}");
+            for (int i = 0; i < count; i++)
+            {
+                Console.WriteLine($"{ids[i],4} {subjects[i],-22}{teachers[i],-18}{groups[i],-9}{days[i],-6}{pairNumbers[i],4} {rooms[i],-8}{typeIds[i],4}");
+            }
+            Console.WriteLine($"\nЗаписів: {count}.");
         }
     }
 }
